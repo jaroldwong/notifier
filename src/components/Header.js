@@ -1,23 +1,27 @@
-import { Heading, Navbar } from 'react-bulma-components';
+import { makeStyles } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles(() => ({
+  grow: {
+    flexGrow: 1,
+  },
+}));
 
 const Header = () => {
+  const classes = useStyles();
+
   return (
-    <Navbar color="light">
-      <Navbar.Brand>
-        <Navbar.Item>
-          <Heading size="2">Notifier</Heading>
-        </Navbar.Item>
-      </Navbar.Brand>
-      <Navbar.Menu>
-        <Navbar.Container align="left">
-          <Navbar.Item>Compose</Navbar.Item>
-        </Navbar.Container>
-        <Navbar.Container align="right">
-          <Navbar.Item>Settings</Navbar.Item>
-          <Navbar.Item>Log out</Navbar.Item>
-        </Navbar.Container>
-      </Navbar.Menu>
-    </Navbar>
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6">Notifier</Typography>
+        <Button color="inherit">Compose</Button>
+        <div className={classes.grow}></div>
+        <Button color="inherit">Log out</Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 

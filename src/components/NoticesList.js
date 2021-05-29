@@ -1,39 +1,40 @@
-import { Box, Table, Tabs } from 'react-bulma-components';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+const data = [
+  { created: 'Yesterday', subject: 'early closure', author: 'jay' },
+  { created: '11 days ago', subject: 'phishing scam', author: 'bob' },
+];
 
 const NoticesList = () => {
   return (
-    <>
-      <Box>
-        <Tabs size="medium">
-          <Tabs.Tab active>Active</Tabs.Tab>
-          <Tabs.Tab>Archived</Tabs.Tab>
-        </Tabs>
-        <Table size="fullwidth" striped>
-          <thead>
-            <tr>
-              <th>Created</th>
-              <th>Subject</th>
-              <th>Author</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Yesterday</td>
-              <td>Early Closure</td>
-              <td>Bob</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>11 days ago</td>
-              <td>phishing scams</td>
-              <td>Bob</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </Table>
-      </Box>
-    </>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Created</TableCell>
+            <TableCell>Subject</TableCell>
+            <TableCell>Author</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((d) => (
+            <TableRow key={`${d.created}-${d.subject}`}>
+              <TableCell>{d.created}</TableCell>
+              <TableCell>{d.subject}</TableCell>
+              <TableCell>{d.author}</TableCell>
+              <TableCell>Actions go here</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
