@@ -1,14 +1,27 @@
 import Header from './components/Header';
-import NoticesList from './components/NoticesList';
-import NavTabs from './components/NavTabs';
+
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import Compose from './pages/Compose';
+import Notices from './pages/Notices';
+import Settings from './pages/Settings';
 
 function App() {
   return (
-    <>
+    <Router>
       <Header />
-      <NavTabs />
-      <NoticesList />
-    </>
+
+      <Switch>
+        <Route exact path="/">
+          <Notices />
+        </Route>
+        <Route path="/compose">
+          <Compose />
+        </Route>
+        <Route path="/settings">
+          <Settings />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

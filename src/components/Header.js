@@ -3,6 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   grow: {
@@ -17,8 +18,13 @@ const Header = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6">Notifier</Typography>
-        <Button color="inherit">Compose</Button>
+        <Button component={Link} to="/compose" color="inherit">
+          Compose
+        </Button>
         <div className={classes.grow}></div>
+        <Button component={Link} to="/settings" color="inherit">
+          Settings
+        </Button>
         <Button color="inherit">Log out</Button>
       </Toolbar>
     </AppBar>
