@@ -18,6 +18,9 @@ const Header = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6">Notifier</Typography>
+        <Button component={Link} to="/" color="inherit">
+          Home
+        </Button>
         <Button component={Link} to="/compose" color="inherit">
           Compose
         </Button>
