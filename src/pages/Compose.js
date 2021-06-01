@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -23,18 +24,50 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Compose = () => {
+  const [classifications, setClassifications] = useState([]);
+  const [modifiers, setModifiers] = useState([]);
+  const [impactedServices, setImpactedServices] = useState([]);
+  const [publishers, setPublishers] = useState([]);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const classifications = await fetch('/classifications');
+      const modifiers = await fetch('/modifiers');
+      const impactedServices = await fetch('/impacted_services');
+      const publishers = await fetch('/publishers');
+
+      const classificationsJSON = await classifications.json();
+      const modifiersJSON = await modifiers.json();
+      const impactedServicesJSON = await impactedServices.json();
+      const publishersJSON = await publishers.json();
+
+      const classificationOptions = await classificationsJSON.map((i) => ({
+        ...i,
+        selected: false,
+      }));
+      const modifierOptions = await modifiersJSON.map((i) => ({
+        ...i,
+        selected: false,
+      }));
+      const impactedServiceOptions = await impactedServicesJSON.map((i) => ({
+        ...i,
+        selected: false,
+      }));
+      const publisherOptions = await publishersJSON.map((i) => ({
+        ...i,
+        selected: false,
+      }));
+
+      setClassifications(classificationOptions);
+      setModifiers(modifierOptions);
+      setImpactedServices(impactedServiceOptions);
+      setPublishers(publisherOptions);
+    };
+
+    fetchSettings();
+  }, []);
+
   const classes = useStyles();
-
-  const [impactedServices, setImpactedServices] = useState({
-    fileServices: false,
-    printServices: false,
-    vpnServices: false,
-  });
-
-  const [publishers, setPublishers] = useState({
-    mailer: true,
-    rss: true,
-  });
 
   const handleImpactedServicesChange = (event) => {
     setImpactedServices((prevState) => {
@@ -49,153 +82,206 @@ const Compose = () => {
   };
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={10} spacing={2}>
-        <form>
-          <TextField label="Recipients" fullWidth></TextField>
-          <TextField label="Subject" fullWidth required></TextField>
-          <TextField
-            label="Impact Statement"
-            fullWidth
-            multiline
-            required
-          ></TextField>
-          <TextField label="Purpose" fullWidth multiline rows="4"></TextField>
-          <TextField
-            label="Resolution"
-            fullWidth
-            multiline
-            rows="4"
-          ></TextField>
-          <TextField
-            label="Workaround"
-            fullWidth
-            multiline
-            rows="4"
-          ></TextField>
-          <TextField
-            label="Other Services"
-            fullWidth
-            multiline
-            rows="4"
-          ></TextField>
-        </form>
-      </Grid>
-      <Grid item xs={2} spacing={2}>
-        <form className={classes.container} noValidate>
-          <TextField
-            id="datetime-local"
-            label="Window Start"
-            type="datetime-local"
-            defaultValue="2021-06-01T08:00"
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </form>
-        <form className={classes.container} noValidate>
-          <TextField
-            id="datetime-local"
-            label="Window Start"
-            type="datetime-local"
-            defaultValue="2021-06-01T08:00"
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </form>
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Classifications</FormLabel>
-          <RadioGroup
-            aria-label="classifications"
-            name="classifications"
-            value="asdf"
-          >
-            <FormControlLabel
+    <Container maxWidth="lg">
+      <Grid container spacing={1}>
+        <Grid item xs={10}>
+          <form>
+            <TextField label="Recipients" fullWidth></TextField>
+            <TextField label="Subject" fullWidth required></TextField>
+            <TextField
+              label="Impact Statement"
+              fullWidth
+              multiline
+              required
+            ></TextField>
+            <TextField label="Purpose" fullWidth multiline rows="4"></TextField>
+            <TextField
+              label="Resolution"
+              fullWidth
+              multiline
+              rows="4"
+            ></TextField>
+            <TextField
+              label="Workaround"
+              fullWidth
+              multiline
+              rows="4"
+            ></TextField>
+            <TextField
+              label="Other Services"
+              fullWidth
+              multiline
+              rows="4"
+            ></TextField>
+          </form>
+        </Grid>
+        <Grid item xs={2}>
+          <form className={classes.container} noValidate>
+            <TextField
+              id="datetime-local"
+              label="Window Start"
+              type="datetime-local"
+              defaultValue="2021-06-01T08:00"
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </form>
+          <form className={classes.container} noValidate>
+            <TextField
+              id="datetime-local"
+              label="Window Start"
+              type="datetime-local"
+              defaultValue="2021-06-01T08:00"
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </form>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Classifications</FormLabel>
+            <RadioGroup
+              aria-label="classifications"
+              name="classifications"
               value=""
-              control={<Radio />}
-              label="Service Degradation"
-            />
-            <FormControlLabel value="male" control={<Radio />} label="Male" />
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
-          </RadioGroup>
-        </FormControl>
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Modifiers</FormLabel>
-          <RadioGroup
-            aria-label="classifications"
-            name="classifications"
-            value="asdf"
-          >
-            <FormControlLabel value="" control={<Radio />} label="Female" />
-            <FormControlLabel value="male" control={<Radio />} label="Male" />
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
-          </RadioGroup>
-        </FormControl>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Impacted Services</FormLabel>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={impactedServices.fileServices}
-                  onChange={handleImpactedServicesChange}
-                  name="fileServices"
-                />
-              }
-              label="File Services"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={impactedServices.printServices}
-                  onChange={handleImpactedServicesChange}
-                  name="printServices"
-                />
-              }
-              label="Print Services"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={impactedServices.vpnServices}
-                  onChange={handleImpactedServicesChange}
-                  name="vpnServices"
-                />
-              }
-              label="VPN Services"
-            />
-          </FormGroup>
-        </FormControl>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Publisher</FormLabel>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={publishers.mailer}
-                  onChange={handlePublishersChange}
-                  name="mailer"
-                />
-              }
-              label="Mailer"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={publishers.rss}
-                  onChange={handlePublishersChange}
-                  name="rss"
-                />
-              }
-              label="RSS Feed"
-            />
-          </FormGroup>
-        </FormControl>
+            >
+              <FormControlLabel
+                value="degradation"
+                control={<Radio />}
+                label="Service Degradation"
+              />
+              <FormControlLabel
+                value="outage"
+                control={<Radio />}
+                label="Service Outage"
+              />
+              <FormControlLabel
+                value="maintenance"
+                control={<Radio />}
+                label="Planned Maintenance"
+              />
+              <FormControlLabel
+                value="emergency"
+                control={<Radio />}
+                label="Emergency Maintenance"
+              />
+              <FormControlLabel
+                value="closure"
+                control={<Radio />}
+                label="Closure"
+              />
+              <FormControlLabel
+                value="security"
+                control={<Radio />}
+                label="Security Notice"
+              />
+              <FormControlLabel
+                value="service"
+                control={<Radio />}
+                label="Service Notice"
+              />
+            </RadioGroup>
+          </FormControl>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Modifiers</FormLabel>
+            <RadioGroup aria-label="modifiers" name="modifiers" value="">
+              <FormControlLabel
+                value="update"
+                control={<Radio />}
+                label="UPDATE"
+              />
+              <FormControlLabel
+                value="resolved"
+                control={<Radio />}
+                label="RESOLVED"
+              />
+              <FormControlLabel
+                value="canceled"
+                control={<Radio />}
+                label="CANCELED"
+              />
+              <FormControlLabel
+                value="reminder"
+                control={<Radio />}
+                label="REMINDER"
+              />
+              <FormControlLabel
+                value="headsup"
+                control={<Radio />}
+                label="HEADS-UP"
+              />
+              <FormControlLabel
+                value="rescheduled"
+                control={<Radio />}
+                label="RE-SCHEDULED"
+              />
+            </RadioGroup>
+          </FormControl>
+          <FormControl component="fieldset" className={classes.formControl}>
+            <FormLabel component="legend">Impacted Services</FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={impactedServices.fileServices}
+                    onChange={handleImpactedServicesChange}
+                    name="fileServices"
+                  />
+                }
+                label="File Services"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={impactedServices.printServices}
+                    onChange={handleImpactedServicesChange}
+                    name="printServices"
+                  />
+                }
+                label="Print Services"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={impactedServices.vpnServices}
+                    onChange={handleImpactedServicesChange}
+                    name="vpnServices"
+                  />
+                }
+                label="VPN Services"
+              />
+            </FormGroup>
+          </FormControl>
+          <FormControl component="fieldset" className={classes.formControl}>
+            <FormLabel component="legend">Publisher</FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={publishers.mailer}
+                    onChange={handlePublishersChange}
+                    name="mailer"
+                  />
+                }
+                label="Mailer"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={publishers.rss}
+                    onChange={handlePublishersChange}
+                    name="rss"
+                  />
+                }
+                label="RSS Feed"
+              />
+            </FormGroup>
+          </FormControl>
+        </Grid>
       </Grid>
-    </Grid>
+    </Container>
   );
 };
 
