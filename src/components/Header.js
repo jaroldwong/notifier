@@ -6,6 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
+  brand: {
+    textDecoration: 'none',
+    boxShadow: 'none',
+  },
   grow: {
     flexGrow: 1,
   },
@@ -17,10 +21,15 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6">Notifier</Typography>
-        <Button component={Link} to="/" color="inherit">
-          Home
-        </Button>
+        <Typography
+          className={classes.brand}
+          component={Link}
+          to="/"
+          variant="h5"
+          color="inherit"
+        >
+          Notifier
+        </Typography>
         <Button component={Link} to="/compose" color="inherit">
           Compose
         </Button>
