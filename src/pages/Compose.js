@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+
+import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
+import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -21,9 +24,21 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: 200,
   },
+  field: {
+    marginTop: 20,
+    marginBottom: 20,
+    display: 'block',
+  },
 }));
 
 const Compose = () => {
+  const classes = useStyles();
+
+  const [formClassification, setFormClassification] = useState('');
+  const [formModifier, setFormModifier] = useState('');
+  const [formServices, setFormServices] = useState([]);
+  const [formPublishers, setFormPublishers] = useState([]);
+
   const [classifications, setClassifications] = useState([]);
   const [modifiers, setModifiers] = useState([]);
   const [impactedServices, setImpactedServices] = useState([]);
@@ -67,8 +82,6 @@ const Compose = () => {
     fetchSettings();
   }, []);
 
-  const classes = useStyles();
-
   const handleImpactedServicesChange = (event) => {
     setImpactedServices((prevState) => {
       return { ...prevState, [event.target.name]: event.target.checked };
@@ -82,40 +95,55 @@ const Compose = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container m="2">
       <Grid container spacing={1}>
-        <Grid item xs={10}>
-          <form>
-            <TextField label="Recipients" fullWidth></TextField>
-            <TextField label="Subject" fullWidth required></TextField>
+        <Grid item lg={8}>
+          <form noValidate autoComplete="off">
+            <TextField className={classes.field} label="Recipients" fullWidth />
             <TextField
+              className={classes.field}
+              label="Subject"
+              fullWidth
+              required
+            />
+            <TextField
+              className={classes.field}
               label="Impact Statement"
               fullWidth
               multiline
               required
-            ></TextField>
-            <TextField label="Purpose" fullWidth multiline rows="4"></TextField>
+            />
             <TextField
+              className={classes.field}
+              label="Purpose"
+              fullWidth
+              multiline
+              rows="4"
+            />
+            <TextField
+              className={classes.field}
               label="Resolution"
               fullWidth
               multiline
               rows="4"
-            ></TextField>
+            />
             <TextField
+              className={classes.field}
               label="Workaround"
               fullWidth
               multiline
               rows="4"
-            ></TextField>
+            />
             <TextField
+              className={classes.field}
               label="Other Services"
               fullWidth
               multiline
               rows="4"
-            ></TextField>
+            />
           </form>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item lg={4}>
           <form className={classes.container} noValidate>
             <TextField
               id="datetime-local"
@@ -145,7 +173,8 @@ const Compose = () => {
             <RadioGroup
               aria-label="classifications"
               name="classifications"
-              value=""
+              value={formClassification}
+              onChange={(e) => setFormClassification(e.target.value)}
             >
               <FormControlLabel
                 value="degradation"
@@ -186,7 +215,14 @@ const Compose = () => {
           </FormControl>
           <FormControl component="fieldset">
             <FormLabel component="legend">Modifiers</FormLabel>
-            <RadioGroup aria-label="modifiers" name="modifiers" value="">
+            <RadioGroup
+              aria-label="modifiers"
+              name="modifiers"
+              value={formModifier}
+              onChange={(e) => {
+                setFormModifier(e.target.value);
+              }}
+            >
               <FormControlLabel
                 value="update"
                 control={<Radio />}
@@ -281,6 +317,14 @@ const Compose = () => {
           </FormControl>
         </Grid>
       </Grid>
+      <Button
+        type="submit"
+        color="primary"
+        variant="contained"
+        startIcon={<SendIcon />}
+      >
+        Submit
+      </Button>
     </Container>
   );
 };

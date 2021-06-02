@@ -1,3 +1,4 @@
+import Container from '@material-ui/core/Container';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -13,28 +14,30 @@ const data = [
 
 const NoticesList = () => {
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Created</TableCell>
-            <TableCell>Subject</TableCell>
-            <TableCell>Author</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((d) => (
-            <TableRow key={`${d.created}-${d.subject}`}>
-              <TableCell>{d.created}</TableCell>
-              <TableCell>{d.subject}</TableCell>
-              <TableCell>{d.author}</TableCell>
-              <TableCell>Actions go here</TableCell>
+    <Container>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Created</TableCell>
+              <TableCell>Subject</TableCell>
+              <TableCell>Author</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data.map((d) => (
+              <TableRow key={`${d.created}-${d.subject}`}>
+                <TableCell>{d.created}</TableCell>
+                <TableCell>{d.subject}</TableCell>
+                <TableCell>{d.author}</TableCell>
+                <TableCell>Actions go here</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 
