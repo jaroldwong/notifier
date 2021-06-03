@@ -37,7 +37,6 @@ const Compose = () => {
   const [formClassification, setFormClassification] = useState('');
   const [formModifier, setFormModifier] = useState('');
   const [formServices, setFormServices] = useState([]);
-  const [formPublishers, setFormPublishers] = useState([]);
 
   const [classifications, setClassifications] = useState([]);
   const [modifiers, setModifiers] = useState([]);
@@ -90,7 +89,11 @@ const Compose = () => {
 
   const handlePublishersChange = (event) => {
     setPublishers((prevState) => {
-      return { ...prevState, [event.target.name]: event.target.checked };
+      return prevState.map((i) =>
+        i.description === event.target.name
+          ? { ...i, selected: event.target.checked }
+          : i
+      );
     });
   };
 
@@ -293,26 +296,19 @@ const Compose = () => {
           <FormControl component="fieldset" className={classes.formControl}>
             <FormLabel component="legend">Publisher</FormLabel>
             <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={publishers.mailer}
-                    onChange={handlePublishersChange}
-                    name="mailer"
-                  />
-                }
-                label="Mailer"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={publishers.rss}
-                    onChange={handlePublishersChange}
-                    name="rss"
-                  />
-                }
-                label="RSS Feed"
-              />
+              {publishers.map((p) => (
+                <FormControlLabel
+                  key={`publisher-${p.id}`}
+                  control={
+                    <Checkbox
+                      checked={p.selected}
+                      onChange={handlePublishersChange}
+                      name={p.description}
+                    />
+                  }
+                  label={p.description}
+                />
+              ))}
             </FormGroup>
           </FormControl>
         </Grid>
