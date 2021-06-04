@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import FormControl from '@material-ui/core/FormControl';
@@ -28,6 +29,14 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     marginBottom: 20,
     display: 'block',
+  },
+  options: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 20,
+  },
+  formControl: {
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -99,8 +108,8 @@ const Compose = () => {
 
   return (
     <Container m="2">
-      <Grid container spacing={1}>
-        <Grid item lg={8}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={8}>
           <form noValidate autoComplete="off">
             <TextField className={classes.field} label="Recipients" fullWidth />
             <TextField
@@ -145,8 +154,16 @@ const Compose = () => {
               rows="4"
             />
           </form>
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            startIcon={<SendIcon />}
+          >
+            Submit
+          </Button>
         </Grid>
-        <Grid item lg={4}>
+        <Grid className={classes.options} item md={4}>
           <form className={classes.container} noValidate>
             <TextField
               id="datetime-local"
@@ -171,7 +188,7 @@ const Compose = () => {
               }}
             />
           </form>
-          <FormControl component="fieldset">
+          <FormControl className={classes.formControl} component="fieldset">
             <FormLabel component="legend">Classifications</FormLabel>
             <RadioGroup
               aria-label="classifications"
@@ -216,7 +233,7 @@ const Compose = () => {
               />
             </RadioGroup>
           </FormControl>
-          <FormControl component="fieldset">
+          <FormControl className={classes.formControl} component="fieldset">
             <FormLabel component="legend">Modifiers</FormLabel>
             <RadioGroup
               aria-label="modifiers"
@@ -313,14 +330,6 @@ const Compose = () => {
           </FormControl>
         </Grid>
       </Grid>
-      <Button
-        type="submit"
-        color="primary"
-        variant="contained"
-        startIcon={<SendIcon />}
-      >
-        Submit
-      </Button>
     </Container>
   );
 };
