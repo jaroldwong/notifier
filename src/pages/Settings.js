@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Redirect,
+  Route,
+  Switch,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
+
+import { string_to_slug } from '../utils';
 
 import { makeStyles } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
@@ -22,7 +31,17 @@ const useStyles = makeStyles({
 const Settings = () => {
   const classes = useStyles();
 
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
+  const { pathname } = useLocation();
+  const param = pathname.split('/')[2];
+
+  const tabValues = [
+    'Classifications',
+    'Modifiers',
+    'Impacted Services',
+    'Publishers',
+    'E-Mail Footer',
+  ];
 
   const [classificationInput, setClassificationInput] = useState('');
 
@@ -76,24 +95,17 @@ const Settings = () => {
 
   return (
     <>
-      <Tabs value={0} centered>
-        <Tab
-          label="Classifications"
-          component={Link}
-          to={`${path}/classifications`}
-        ></Tab>
-        <Tab label="Modifiers" component={Link} to={`${path}/modifiers`}></Tab>
-        <Tab
-          label="Impacted Services"
-          component={Link}
-          to={`${path}/impacted-services`}
-        ></Tab>
-        <Tab
-          label="Publishers"
-          component={Link}
-          to={`${path}/publishers`}
-        ></Tab>
-        <Tab label="E-mail Footer" component={Link} to={`${path}/footer`}></Tab>
+      <Tabs
+        value={tabValues.findIndex((tab) => string_to_slug(tab) === param)}
+        centered
+      >
+        {tabValues.map((tab) => (
+          <Tab
+            label={tab}
+            component={Link}
+            to={`${path}/${string_to_slug(tab)}`}
+          ></Tab>
+        ))}
       </Tabs>
 
       <Switch>
