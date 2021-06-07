@@ -1,14 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
+import { makeStyles } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+
+const useStyles = makeStyles({
+  inputGroup: {
+    display: 'flex',
+    alignContent: 'center',
+    margin: '16px',
+  },
+});
 
 const Settings = () => {
+  const classes = useStyles();
+
   let { path, url } = useRouteMatch();
+
+  const [classificationInput, setClassificationInput] = useState('');
 
   const [classifications, setClassifications] = useState([]);
   const [modifiers, setModifiers] = useState([]);
@@ -29,6 +45,34 @@ const Settings = () => {
 
     fetchSettings();
   }, []);
+
+  const handleClassificationInput = (event) => {
+    setClassificationInput(event.target.value);
+  };
+
+  const handleAddClassification = async (event) => {
+    event.preventDefault();
+    const response = await fetch('/classifications/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ description: classificationInput }),
+    });
+
+    const newClassification = await response.json();
+
+    setClassifications([...classifications, newClassification]);
+    setClassificationInput('');
+  };
+
+  const handleDeleteClassification = (id) => {
+    fetch(`/classifications/${id}`, {
+      method: 'DELETE',
+    });
+
+    setClassifications(classifications.filter((c) => c.id !== id));
+  };
 
   return (
     <>
@@ -59,14 +103,31 @@ const Settings = () => {
             <Box>
               {classifications.map((item) => {
                 return (
-                  <TextField
-                    fullWidth
-                    margin="normal"
-                    defaultValue={item.description}
-                    key={`classification-${item.id}`}
-                  ></TextField>
+                  <div className={classes.inputGroup}>
+                    <TextField
+                      fullWidth
+                      defaultValue={item.description}
+                      key={`classification-${item.id}`}
+                    ></TextField>
+                    <DeleteForeverOutlinedIcon
+                      onClick={() => handleDeleteClassification(item.id)}
+                    ></DeleteForeverOutlinedIcon>
+                  </div>
                 );
               })}
+              <form
+                noValidate
+                className={classes.inputGroup}
+                onSubmit={handleAddClassification}
+              >
+                <TextField
+                  fullWidth
+                  placeholder="Add new classification"
+                  value={classificationInput}
+                  onChange={handleClassificationInput}
+                ></TextField>
+                <AddIcon />
+              </form>
             </Box>
           </Route>
           <Route exact path={`${path}/modifiers`}>
