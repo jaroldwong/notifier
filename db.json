@@ -1,43 +1,80 @@
 {
   "classifications": [
-      { "id": 1, "description": "SERVICE DEGRADATION: service is operational but slow or with some features disabled"},
-      { "id": 2, "description": "SERVICE OUTAGE: service is unexpectedly unavailable"},
-      { "id": 3, "description": "PLANNED MAINTENANCE: will impact service availability, at least two days' advance notice"},
-      { "id": 4, "description": "EMERGENCY MAINTENANCE: will impact service availability, less than two days' advance notice"},
-      { "id": 5, "description": "CLOSURE: will impact support services"},
-      { "id": 6, "description": "SECURITY NOTICE: security warnings and notifications"},
-      { "id": 7, "description": "SERVICE NOTICE: general notes about service issues that are not incidents"}
-    ],
+    {
+      "id": 1,
+      "description": "SERVICE DEGRADATION: service is operational but slow or with some features disabled"
+    },
+    {
+      "id": 2,
+      "description": "SERVICE OUTAGE: service is unexpectedly unavailable"
+    },
+    {
+      "id": 3,
+      "description": "PLANNED MAINTENANCE: will impact service availability, at least two days' advance notice"
+    },
+    {
+      "id": 4,
+      "description": "EMERGENCY MAINTENANCE: will impact service availability, less than two days' advance notice"
+    },
+    { "id": 5, "description": "CLOSURE: will impact support services" },
+    {
+      "id": 6,
+      "description": "SECURITY NOTICE: security warnings and notifications"
+    },
+    {
+      "id": 7,
+      "description": "SERVICE NOTICE: general notes about service issues that are not incidents"
+    }
+  ],
   "impacted_services": [
-      { "id": 1, "description": "File Services (Shared and User Drives)"},
-      { "id": 2, "description": "Print Services (Network Printing and Print Metering)"},
-      { "id": 3, "description": "Department and Project Websites"},
-      { "id": 4, "description": "Email and Calendaring Services"},
-      { "id": 5, "description": "Network Connectivity"},
-      { "id": 6, "description": "Wireless Networks"},
-      { "id": 7, "description": "Network Licensing"},
-      { "id": 8, "description": "IT Service Desk"},
-      { "id": 9, "description": "VPN Service"},
-      { "id": 10, "description": "IT Desktop Support"},
-      { "id": 12, "description": "Computational Research Service"},
-      { "id": 13, "description": "PrePurchasing"},
-      { "id": 14, "description": "Websites and Web Applications"},
-      { "id": 16, "description": "Drop-in Location"},
-      { "id": 18, "description": "IT Phone System"}
-    ],
-    "modifiers": [
-        {"id": 1, "description": "UPDATE: prefix to previous subject when sending an update to an existing issue"},
-        {"id": 2, "description": "RESOLVED: prefix to previous subject when notifying that an issue has been resolved"},
-        {"id": 3, "description": "CANCELED: prefix to previous subject when notifying of cancellation of planned maintenance"},
-        {"id": 4, "description": "REMINDER: prefix to previous subject when sending a reminder about planned maintenance"},
-        {"id": 5, "description": "HEADS-UP: prefix to subject when serious outage or degradation is suspected but not confirmed"},
-        {"id": 6, "description": "RE-SCHEDULED: prefix to subject when a Maintenance must be re-scheduled"}
-    ],
-    "publishers": [
-        {"id": 1, "description": "mailer"},
-        {"id": 2, "description": "rss"}
-    ],
-    "footer": [
-        {"id": 1, "description": ""}
-    ]
+    { "id": 1, "description": "File Services (Shared and User Drives)" },
+    {
+      "id": 2,
+      "description": "Print Services (Network Printing and Print Metering)"
+    },
+    { "id": 3, "description": "Department and Project Websites" },
+    { "id": 4, "description": "Email and Calendaring Services" },
+    { "id": 5, "description": "Network Connectivity" },
+    { "id": 6, "description": "Wireless Networks" },
+    { "id": 7, "description": "Network Licensing" },
+    { "id": 8, "description": "IT Service Desk" },
+    { "id": 9, "description": "VPN Service" },
+    { "id": 10, "description": "IT Desktop Support" },
+    { "id": 12, "description": "Computational Research Service" },
+    { "id": 13, "description": "PrePurchasing" },
+    { "id": 14, "description": "Websites and Web Applications" },
+    { "id": 16, "description": "Drop-in Location" },
+    { "id": 18, "description": "IT Phone System" }
+  ],
+  "modifiers": [
+    {
+      "id": 1,
+      "description": "UPDATE: prefix to previous subject when sending an update to an existing issue"
+    },
+    {
+      "id": 2,
+      "description": "RESOLVED: prefix to previous subject when notifying that an issue has been resolved"
+    },
+    {
+      "id": 3,
+      "description": "CANCELED: prefix to previous subject when notifying of cancellation of planned maintenance"
+    },
+    {
+      "id": 4,
+      "description": "REMINDER: prefix to previous subject when sending a reminder about planned maintenance"
+    },
+    {
+      "id": 5,
+      "description": "HEADS-UP: prefix to subject when serious outage or degradation is suspected but not confirmed"
+    },
+    {
+      "id": 6,
+      "description": "RE-SCHEDULED: prefix to subject when a Maintenance must be re-scheduled"
+    }
+  ],
+  "publishers": [
+    { "id": 1, "description": "mailer" },
+    { "id": 2, "description": "rss" }
+  ],
+  "footer": [{ "id": 1, "description": "" }]
 }
