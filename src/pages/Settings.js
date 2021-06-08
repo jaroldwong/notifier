@@ -44,6 +44,8 @@ const Settings = () => {
   ];
 
   const [classificationInput, setClassificationInput] = useState('');
+  const [modifierInput, setModifierInput] = useState('');
+  const [impactedServiceInput, setImpactedServiceInput] = useState('');
 
   const [classifications, setClassifications] = useState([]);
   const [modifiers, setModifiers] = useState([]);
@@ -91,6 +93,46 @@ const Settings = () => {
     });
 
     setClassifications(classifications.filter((c) => c.id !== id));
+  };
+
+  const handleModifierInput = (event) => {
+    setModifierInput(event.target.value);
+  };
+
+  const handleAddModifier = async (event) => {
+    event.preventDefault();
+    const response = await fetch('/modifiers/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ description: modifierInput }),
+    });
+
+    const newModifier = await response.json();
+
+    setModifiers([...modifiers, newModifier]);
+    setModifierInput('');
+  };
+
+  const handleImpactedServiceInput = (event) => {
+    setImpactedServiceInput(event.target.value);
+  };
+
+  const handleAddImpactedService = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch('/impacted_services', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ description: impactedServiceInput }),
+    });
+    const newImpactedService = await response.json();
+
+    setImpactedServices([...impactedServices, newImpactedService]);
+    setImpactedServiceInput('');
   };
 
   return (
@@ -154,6 +196,13 @@ const Settings = () => {
                   ></TextField>
                 );
               })}
+              <form onSubmit={handleAddModifier}>
+                <TextField
+                  fullWidth
+                  value={modifierInput}
+                  onChange={handleModifierInput}
+                />
+              </form>
             </Box>
           </Route>
           <Route exact path={`${path}/impacted-services`}>
@@ -168,6 +217,13 @@ const Settings = () => {
                   ></TextField>
                 );
               })}
+              <form onSubmit={handleAddImpactedService}>
+                <TextField
+                  fullWidth
+                  value={impactedServiceInput}
+                  onChange={handleImpactedServiceInput}
+                />
+              </form>
             </Box>
           </Route>
           <Route exact path={`${path}/publishers`}>
