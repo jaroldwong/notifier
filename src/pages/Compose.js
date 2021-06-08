@@ -43,9 +43,16 @@ const useStyles = makeStyles((theme) => ({
 const Compose = () => {
   const classes = useStyles();
 
-  const [formClassification, setFormClassification] = useState('');
-  const [formModifier, setFormModifier] = useState('');
-  const [formServices, setFormServices] = useState([]);
+  const [formFields, setFormFields] = useState({
+    subject: '',
+    impactStatement: '',
+    purpose: '',
+    resolution: '',
+    workaround: '',
+    otherServices: '',
+    classification: '',
+    modifier: '',
+  });
 
   const [classifications, setClassifications] = useState([]);
   const [modifiers, setModifiers] = useState([]);
@@ -106,17 +113,37 @@ const Compose = () => {
     });
   };
 
+  const handleFormFieldInput = (event) => {
+    const { name, value } = event.target;
+    setFormFields({ ...formFields, [name]: value });
+  };
+
+  const handleSend = (event) => {
+    event.preventDefault();
+
+    const message = {
+      ...formFields,
+      sender: 'loginId',
+      isActive: true,
+    };
+
+    console.log(message);
+  };
+
   return (
     <Container m="2">
       <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
-          <form noValidate autoComplete="off">
+          <form noValidate autoComplete="off" onSubmit={handleSend}>
             <TextField className={classes.field} label="Recipients" fullWidth />
             <TextField
               className={classes.field}
               label="Subject"
               fullWidth
               required
+              name="subject"
+              value={formFields.subject}
+              onChange={handleFormFieldInput}
             />
             <TextField
               className={classes.field}
@@ -124,6 +151,9 @@ const Compose = () => {
               fullWidth
               multiline
               required
+              name="impactStatement"
+              value={formFields.impactStatement}
+              onChange={handleFormFieldInput}
             />
             <TextField
               className={classes.field}
@@ -131,6 +161,9 @@ const Compose = () => {
               fullWidth
               multiline
               rows="4"
+              name="purpose"
+              value={formFields.purpose}
+              onChange={handleFormFieldInput}
             />
             <TextField
               className={classes.field}
@@ -138,6 +171,9 @@ const Compose = () => {
               fullWidth
               multiline
               rows="4"
+              name="resolution"
+              value={formFields.resolution}
+              onChange={handleFormFieldInput}
             />
             <TextField
               className={classes.field}
@@ -145,6 +181,9 @@ const Compose = () => {
               fullWidth
               multiline
               rows="4"
+              name="workaround"
+              value={formFields.workaround}
+              onChange={handleFormFieldInput}
             />
             <TextField
               className={classes.field}
@@ -152,16 +191,19 @@ const Compose = () => {
               fullWidth
               multiline
               rows="4"
+              name="otherServices"
+              value={formFields.otherServices}
+              onChange={handleFormFieldInput}
             />
+            <Button
+              type="submit"
+              color="primary"
+              variant="contained"
+              startIcon={<SendIcon />}
+            >
+              Submit
+            </Button>
           </form>
-          <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            startIcon={<SendIcon />}
-          >
-            Submit
-          </Button>
         </Grid>
         <Grid className={classes.options} item md={4}>
           <form className={classes.container} noValidate>
@@ -192,9 +234,9 @@ const Compose = () => {
             <FormLabel component="legend">Classifications</FormLabel>
             <RadioGroup
               aria-label="classifications"
-              name="classifications"
-              value={formClassification}
-              onChange={(e) => setFormClassification(e.target.value)}
+              name="classification"
+              value={formFields.classification}
+              onChange={handleFormFieldInput}
             >
               <FormControlLabel
                 value="degradation"
@@ -237,11 +279,9 @@ const Compose = () => {
             <FormLabel component="legend">Modifiers</FormLabel>
             <RadioGroup
               aria-label="modifiers"
-              name="modifiers"
-              value={formModifier}
-              onChange={(e) => {
-                setFormModifier(e.target.value);
-              }}
+              name="modifier"
+              value={formFields.modifier}
+              onChange={handleFormFieldInput}
             >
               <FormControlLabel
                 value="update"
