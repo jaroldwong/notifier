@@ -52,6 +52,8 @@ const Compose = () => {
     otherServices: '',
     classification: '',
     modifier: '',
+    startDate: '',
+    endDate: '',
   });
 
   const [classifications, setClassifications] = useState([]);
@@ -114,6 +116,7 @@ const Compose = () => {
   };
 
   const handleFormFieldInput = (event) => {
+    debugger;
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });
   };
@@ -216,6 +219,8 @@ const Compose = () => {
               InputLabelProps={{
                 shrink: true,
               }}
+              name="startDate"
+              onChange={handleFormFieldInput}
             />
           </form>
           <form className={classes.container} noValidate>
@@ -228,6 +233,8 @@ const Compose = () => {
               InputLabelProps={{
                 shrink: true,
               }}
+              name="endDate"
+              onChange={handleFormFieldInput}
             />
           </form>
           <FormControl className={classes.formControl} component="fieldset">
