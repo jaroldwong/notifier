@@ -63,24 +63,28 @@ const Compose = () => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const classifications = await fetch('/classifications');
-      const modifiers = await fetch('/modifiers');
+      const classifications = await fetch('/classifications').then((res) =>
+        res.json()
+      );
+      const modifiers = await fetch('/modifiers').then((res) => res.json());
       const impactedServices = await fetch('/impacted_services');
       const publishers = await fetch('/publishers');
 
-      const classificationsJSON = await classifications.json();
-      const modifiersJSON = await modifiers.json();
       const impactedServicesJSON = await impactedServices.json();
       const publishersJSON = await publishers.json();
 
-      const classificationOptions = await classificationsJSON.map((i) => ({
-        ...i,
-        selected: false,
+      const classificationOptions = classifications.map((c) => {
+        return {
+          ...c,
+          description: c.description.slice(0, c.description.indexOf(':')),
+        };
+      });
+
+      const modifierOptions = modifiers.map((m) => ({
+        ...m,
+        description: m.description.slice(0, m.description.indexOf(':')),
       }));
-      const modifierOptions = await modifiersJSON.map((i) => ({
-        ...i,
-        selected: false,
-      }));
+
       const impactedServiceOptions = await impactedServicesJSON.map((i) => ({
         ...i,
         selected: false,
@@ -245,41 +249,14 @@ const Compose = () => {
               value={formFields.classification}
               onChange={handleFormFieldInput}
             >
-              <FormControlLabel
-                value="degradation"
-                control={<Radio />}
-                label="Service Degradation"
-              />
-              <FormControlLabel
-                value="outage"
-                control={<Radio />}
-                label="Service Outage"
-              />
-              <FormControlLabel
-                value="maintenance"
-                control={<Radio />}
-                label="Planned Maintenance"
-              />
-              <FormControlLabel
-                value="emergency"
-                control={<Radio />}
-                label="Emergency Maintenance"
-              />
-              <FormControlLabel
-                value="closure"
-                control={<Radio />}
-                label="Closure"
-              />
-              <FormControlLabel
-                value="security"
-                control={<Radio />}
-                label="Security Notice"
-              />
-              <FormControlLabel
-                value="service"
-                control={<Radio />}
-                label="Service Notice"
-              />
+              {classifications.map((c) => (
+                <FormControlLabel
+                  key={`classification-${c.id}`}
+                  value={c.description}
+                  control={<Radio />}
+                  label={c.description}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
           <FormControl className={classes.formControl} component="fieldset">
@@ -290,36 +267,14 @@ const Compose = () => {
               value={formFields.modifier}
               onChange={handleFormFieldInput}
             >
-              <FormControlLabel
-                value="update"
-                control={<Radio />}
-                label="UPDATE"
-              />
-              <FormControlLabel
-                value="resolved"
-                control={<Radio />}
-                label="RESOLVED"
-              />
-              <FormControlLabel
-                value="canceled"
-                control={<Radio />}
-                label="CANCELED"
-              />
-              <FormControlLabel
-                value="reminder"
-                control={<Radio />}
-                label="REMINDER"
-              />
-              <FormControlLabel
-                value="headsup"
-                control={<Radio />}
-                label="HEADS-UP"
-              />
-              <FormControlLabel
-                value="rescheduled"
-                control={<Radio />}
-                label="RE-SCHEDULED"
-              />
+              {modifiers.map((m) => (
+                <FormControlLabel
+                  key={`modifier-${m.id}`}
+                  value={m.description}
+                  control={<Radio />}
+                  label={m.description}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
           <FormControl component="fieldset" className={classes.formControl}>
