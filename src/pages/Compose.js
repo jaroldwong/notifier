@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { capitalize } from '../utils';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -75,13 +76,17 @@ const Compose = () => {
       const classificationOptions = classifications.map((c) => {
         return {
           ...c,
-          description: c.description.slice(0, c.description.indexOf(':')),
+          description: capitalize(
+            c.description.slice(0, c.description.indexOf(':'))
+          ),
         };
       });
 
       const modifierOptions = modifiers.map((m) => ({
         ...m,
-        description: m.description.slice(0, m.description.indexOf(':')),
+        description: capitalize(
+          m.description.slice(0, m.description.indexOf(':'))
+        ),
       }));
 
       const impactedServiceOptions = await impactedServicesJSON.map((i) => ({
