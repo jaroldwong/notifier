@@ -1,6 +1,6 @@
 import Header from './components/Header';
 
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Compose from './pages/Compose';
 import Notices from './pages/Notices';
 import Settings from './pages/Settings';

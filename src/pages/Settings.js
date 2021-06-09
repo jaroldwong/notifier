@@ -12,7 +12,6 @@ import { string_to_slug } from '../utils';
 
 import { makeStyles } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -33,7 +32,7 @@ const Settings = () => {
 
   let { path } = useRouteMatch();
   const { pathname } = useLocation();
-  const param = pathname.split('/')[2];
+  const param = pathname.split('/').pop();
 
   const tabValues = [
     'Classifications',
@@ -43,6 +42,9 @@ const Settings = () => {
     'E-Mail Footer',
   ];
 
+  const [currentTab, setCurrentTab] = useState(() => {
+    return tabValues.findIndex((t) => string_to_slug(t) === param);
+  });
   const [classificationInput, setClassificationInput] = useState('');
   const [modifierInput, setModifierInput] = useState('');
   const [impactedServiceInput, setImpactedServiceInput] = useState('');
@@ -135,33 +137,41 @@ const Settings = () => {
     setImpactedServiceInput('');
   };
 
+  const handleTabUpdate = (nextTab) => {
+    const tabValue = tabValues.findIndex((tab) => {
+      return tab === nextTab;
+    });
+    setCurrentTab(tabValue);
+  };
+
   return (
     <>
-      <Tabs
-        value={tabValues.findIndex((tab) => string_to_slug(tab) === param)}
-        centered
-      >
-        {tabValues.map((tab) => (
+      <Tabs value={currentTab} centered>
+        {tabValues.map((tab, i) => (
           <Tab
+            key={`settings-tab-${i}`}
             label={tab}
             component={Link}
             to={`${path}/${string_to_slug(tab)}`}
+            onClick={() => handleTabUpdate(tab)}
           ></Tab>
         ))}
       </Tabs>
 
-      <Switch>
-        <Redirect exact from="/settings" to="/settings/classifications" />
-        <Container maxWidth="lg">
+      <Container maxWidth="lg">
+        <Switch>
+          <Redirect exact from="/settings" to="/settings/classifications" />
           <Route path={`${path}/classifications`}>
             <Box>
               {classifications.map((item) => {
                 return (
-                  <div className={classes.inputGroup}>
+                  <div
+                    key={`classification-${item.id}`}
+                    className={classes.inputGroup}
+                  >
                     <TextField
                       fullWidth
                       defaultValue={item.description}
-                      key={`classification-${item.id}`}
                     ></TextField>
                     <DeleteForeverOutlinedIcon
                       onClick={() => handleDeleteClassification(item.id)}
@@ -240,8 +250,8 @@ const Settings = () => {
               })}
             </Box>
           </Route>
-        </Container>
-      </Switch>
+        </Switch>
+      </Container>
     </>
   );
 };

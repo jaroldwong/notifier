@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import FormControl from '@material-ui/core/FormControl';
@@ -221,7 +220,7 @@ const Compose = () => {
         <Grid className={classes.options} item md={4}>
           <form className={classes.container} noValidate>
             <TextField
-              id="datetime-local"
+              id="datetime-local-start"
               label="Window Start"
               type="datetime-local"
               defaultValue="2021-06-01T08:00"
@@ -235,7 +234,7 @@ const Compose = () => {
           </form>
           <form className={classes.container} noValidate>
             <TextField
-              id="datetime-local"
+              id="datetime-local-end"
               label="Window Start"
               type="datetime-local"
               defaultValue="2021-06-01T08:00"
