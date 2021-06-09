@@ -105,7 +105,11 @@ const Compose = () => {
 
   const handleImpactedServicesChange = (event) => {
     setImpactedServices((prevState) => {
-      return { ...prevState, [event.target.name]: event.target.checked };
+      return prevState.map((i) =>
+        i.description === event.target.name
+          ? { ...i, selected: event.target.checked }
+          : i
+      );
     });
   };
 
@@ -130,6 +134,8 @@ const Compose = () => {
 
     const message = {
       ...formFields,
+      impactedServices: impactedServices.filter((i) => i.selected === true),
+      publishers: publishers.filter((p) => p.selected === true),
       sender: 'loginId',
       isActive: true,
     };
@@ -277,41 +283,26 @@ const Compose = () => {
               ))}
             </RadioGroup>
           </FormControl>
+
           <FormControl component="fieldset" className={classes.formControl}>
             <FormLabel component="legend">Impacted Services</FormLabel>
             <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={impactedServices.fileServices}
-                    onChange={handleImpactedServicesChange}
-                    name="fileServices"
-                  />
-                }
-                label="File Services"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={impactedServices.printServices}
-                    onChange={handleImpactedServicesChange}
-                    name="printServices"
-                  />
-                }
-                label="Print Services"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={impactedServices.vpnServices}
-                    onChange={handleImpactedServicesChange}
-                    name="vpnServices"
-                  />
-                }
-                label="VPN Services"
-              />
+              {impactedServices.map((i) => (
+                <FormControlLabel
+                  key={`impacted-service-${i.id}`}
+                  label={i.description}
+                  control={
+                    <Checkbox
+                      checked={i.selected}
+                      onChange={handleImpactedServicesChange}
+                      name={i.description}
+                    />
+                  }
+                />
+              ))}
             </FormGroup>
           </FormControl>
+
           <FormControl component="fieldset" className={classes.formControl}>
             <FormLabel component="legend">Publisher</FormLabel>
             <FormGroup>
