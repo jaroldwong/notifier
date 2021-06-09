@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import Container from '@material-ui/core/Container';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,12 +9,19 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-const data = [
-  { created: 'Yesterday', subject: 'early closure', author: 'jay' },
-  { created: '11 days ago', subject: 'phishing scam', author: 'bob' },
-];
-
 const NoticesList = () => {
+  const MS_IN_DAY = 86400000;
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const data = await fetch('/messages').then((response) => response.json());
+      setMessages(data);
+    };
+
+    fetchMessages();
+  }, []);
+
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -26,9 +35,16 @@ const NoticesList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((d) => (
+            {messages.map((d) => (
               <TableRow key={`${d.created}-${d.subject}`}>
-                <TableCell>{d.created}</TableCell>
+                <TableCell>
+                  {new Intl.RelativeTimeFormat('en', {
+                    numeric: 'auto',
+                  }).format(
+                    Math.round((d.createdAt - Date.now()) / MS_IN_DAY),
+                    'day'
+                  )}
+                </TableCell>
                 <TableCell>{d.subject}</TableCell>
                 <TableCell>{d.author}</TableCell>
                 <TableCell>Actions go here</TableCell>

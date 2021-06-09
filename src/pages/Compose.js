@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { capitalize } from '../utils';
+import { capitalize, post } from '../utils';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -42,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Compose = () => {
   const classes = useStyles();
+
+  let history = useHistory();
 
   const [formFields, setFormFields] = useState({
     subject: '',
@@ -133,7 +136,7 @@ const Compose = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const handleSend = (event) => {
+  const handleSend = async (event) => {
     event.preventDefault();
 
     const message = {
@@ -142,9 +145,14 @@ const Compose = () => {
       publishers: publishers.filter((p) => p.selected === true),
       sender: 'loginId',
       isActive: true,
+      createdAt: Date.now(), // doing it here to avoid custom json-server setup
     };
 
-    console.log(message);
+    const response = await post('/messages', message);
+
+    if (response.status === 201) {
+      history.push('/');
+    }
   };
 
   return (
