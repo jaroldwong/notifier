@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core';
+import { capitalize } from '../utils';
 
+import Chip from '@material-ui/core/Chip';
 import Container from '@material-ui/core/Container';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,19 +12,34 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+const useStyles = makeStyles((theme) => ({
+  chip: {
+    margin: theme.spacing(0.5),
+  },
+}));
+
 const NoticesList = () => {
+  const classes = useStyles();
+
   const MS_IN_DAY = 86400000;
   const [messages, setMessages] = useState([]);
+  const [modifiers, setModifiers] = useState([]);
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      const data = await fetch('/messages').then((response) => response.json());
-      setMessages(data);
+    const fetchData = async () => {
+      const messages = await fetch('/messages').then((response) =>
+        response.json()
+      );
+      const modifiers = await fetch('/modifiers').then((res) => res.json());
+
+      setMessages(messages);
+      setModifiers(modifiers);
     };
 
-    fetchMessages();
+    fetchData();
   }, []);
 
+  const handleModifier = () => {};
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -47,7 +65,23 @@ const NoticesList = () => {
                 </TableCell>
                 <TableCell>{d.subject}</TableCell>
                 <TableCell>{d.author}</TableCell>
-                <TableCell>Actions go here</TableCell>
+                <TableCell style={{ width: 433 }}>
+                  {modifiers.map((m) => (
+                    <Chip
+                      className={classes.chip}
+                      label={capitalize(
+                        m.description.substring(0, m.description.indexOf(':'))
+                      )}
+                      variant="outlined"
+                    />
+                  ))}
+                  <Chip
+                    className={classes.chip}
+                    label="Archive"
+                    variant="outlined"
+                    onClick={handleModifier}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
