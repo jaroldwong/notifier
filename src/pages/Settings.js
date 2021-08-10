@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import apiClient from '../utils/apiClient';
 import { string_to_slug } from '../utils';
 
 import { makeStyles } from '@material-ui/core';
@@ -56,14 +57,23 @@ const Settings = () => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const classifications = await fetch('/classifications');
-      const modifiers = await fetch('/modifiers');
-      const impactedServices = await fetch('/impacted_services');
-      const publishers = await fetch('/publishers');
-      setClassifications(await classifications.json());
-      setModifiers(await modifiers.json());
-      setImpactedServices(await impactedServices.json());
-      setPublishers(await publishers.json());
+      const classificationsProm = apiClient.get('/classifications');
+      const modifiersProm = apiClient.get('/modifiers');
+      const impactedServicesProm = apiClient.get('/impacted_services');
+      const publishersProm = apiClient.get('/publishers');
+
+      const [classifications, modifiers, impactedServices, publishers] =
+        await Promise.all([
+          classificationsProm,
+          modifiersProm,
+          impactedServicesProm,
+          publishersProm,
+        ]);
+
+      setClassifications(classifications);
+      setModifiers(modifiers);
+      setImpactedServices(impactedServices);
+      setPublishers(publishers);
     };
 
     fetchSettings();

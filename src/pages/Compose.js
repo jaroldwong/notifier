@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { capitalize, post } from '../utils';
+
+import apiClient from '../utils/apiClient';
+import { capitalize } from '../utils';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -66,15 +68,18 @@ const Compose = () => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const classifications = await fetch('/classifications').then((res) =>
-        res.json()
-      );
-      const modifiers = await fetch('/modifiers').then((res) => res.json());
-      const impactedServices = await fetch('/impacted_services');
-      const publishers = await fetch('/publishers');
+      const classificationsProm = apiClient.get('/classifications');
+      const modifiersProm = apiClient.get('/modifiers');
+      const impactedServicesProm = apiClient.get('/impacted_services');
+      const publishersProm = apiClient.get('/publishers');
 
-      const impactedServicesJSON = await impactedServices.json();
-      const publishersJSON = await publishers.json();
+      const [classifications, modifiers, impactedServices, publishers] =
+        await Promise.all([
+          classificationsProm,
+          modifiersProm,
+          impactedServicesProm,
+          publishersProm,
+        ]);
 
       const classificationOptions = classifications.map((c) => {
         return {
@@ -92,11 +97,11 @@ const Compose = () => {
         ),
       }));
 
-      const impactedServiceOptions = await impactedServicesJSON.map((i) => ({
+      const impactedServiceOptions = impactedServices.map((i) => ({
         ...i,
         selected: false,
       }));
-      const publisherOptions = await publishersJSON.map((i) => ({
+      const publisherOptions = publishers.map((i) => ({
         ...i,
         selected: false,
       }));
@@ -148,7 +153,7 @@ const Compose = () => {
       createdAt: Date.now(), // doing it here to avoid custom json-server setup
     };
 
-    const response = await post('/messages', message);
+    const response = await apiClient.post('/messages', message);
 
     if (response.status === 201) {
       history.push('/');
