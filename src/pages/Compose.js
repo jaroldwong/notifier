@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
-import apiClient from '../utils/apiClient';
+import { apiService } from '../services/apiService';
 import { capitalize } from '../utils';
 
 import Button from '@material-ui/core/Button';
@@ -68,10 +68,10 @@ const Compose = () => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const classificationsProm = apiClient.get('/classifications');
-      const modifiersProm = apiClient.get('/modifiers');
-      const impactedServicesProm = apiClient.get('/impacted_services');
-      const publishersProm = apiClient.get('/publishers');
+      const classificationsProm = apiService.get('/classifications');
+      const modifiersProm = apiService.get('/modifiers');
+      const impactedServicesProm = apiService.get('/impacted_services');
+      const publishersProm = apiService.get('/publishers');
 
       const [classifications, modifiers, impactedServices, publishers] =
         await Promise.all([
@@ -153,7 +153,7 @@ const Compose = () => {
       createdAt: Date.now(), // doing it here to avoid custom json-server setup
     };
 
-    const response = await apiClient.post('/messages', message);
+    const response = await apiService.post('/messages', message);
 
     if (response.status === 201) {
       history.push('/');

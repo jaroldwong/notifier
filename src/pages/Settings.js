@@ -8,7 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import apiClient from '../utils/apiClient';
+import { apiService } from '../services/apiService';
 import { string_to_slug } from '../utils';
 
 import { makeStyles } from '@material-ui/core';
@@ -57,10 +57,10 @@ const Settings = () => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const classificationsProm = apiClient.get('/classifications');
-      const modifiersProm = apiClient.get('/modifiers');
-      const impactedServicesProm = apiClient.get('/impacted_services');
-      const publishersProm = apiClient.get('/publishers');
+      const classificationsProm = apiService.get('/classifications');
+      const modifiersProm = apiService.get('/modifiers');
+      const impactedServicesProm = apiService.get('/impacted_services');
+      const publishersProm = apiService.get('/publishers');
 
       const [classifications, modifiers, impactedServices, publishers] =
         await Promise.all([

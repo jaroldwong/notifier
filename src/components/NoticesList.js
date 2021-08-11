@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { capitalize } from '../utils';
-import apiClient from '../utils/apiClient';
+import { apiService } from '../services/apiService';
 
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -31,8 +31,8 @@ const NoticesList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const messagesProm = apiClient.get('/messages');
-      const modifiersProm = apiClient.get('/modifiers');
+      const messagesProm = apiService.get('/messages');
+      const modifiersProm = apiService.get('/modifiers');
 
       await Promise.all([messagesProm, modifiersProm]).then((results) => {
         const [messages, modifiers] = results;

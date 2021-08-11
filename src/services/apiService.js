@@ -1,9 +1,9 @@
-const apiClient = {
-  get: async function (url) {
+export const apiService = {
+  async get(url) {
     const response = await fetch(url);
     return await response.json();
   },
-  post: async function (url, body) {
+  async post(url, body) {
     return await fetch(url, {
       method: 'POST',
       headers: {
@@ -13,5 +13,3 @@ const apiClient = {
     });
   },
 };
-
-export default apiClient;
